@@ -38,7 +38,7 @@ compare_vol vnav.non-mosaic.mgz vnav.non-mosaic.ref.mgz
 test_command mri_convert --mosaic-fix-noascii vnav.mosaic.dcm vnav.mosaic.mgz
 compare_vol vnav.mosaic.mgz vnav.mosaic.ref.mgz
 
-# -dcm2niix DICOM conversion - kSliceOrientMosaicNegativeDeterminant
+# -dcm2niix DICOM conversion - kSliceOrientMosaicNegativeDeterminant (the data is taken from dcm2niix qa data)
 test_command mri_convert -dcm2niix dtitest_Siemens_ccbbi/DTI_sag_002_001_00001.dcm dtinegativemosaic.mgz
 compare_vol dtinegativemosaic.mgz dtitest_Siemens_ccbbi/ref/dtinegativemosaic.ref.mgz
 compare_file dtinegativemosaic.bvals dtitest_Siemens_ccbbi/ref/dtinegativemosaic.ref.bvals

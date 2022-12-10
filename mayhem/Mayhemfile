@@ -1,4 +1,0 @@
-project: freesurfer
-target: xmlToHtml
-cmds:
-  - cmd: /xmlToHtml @@

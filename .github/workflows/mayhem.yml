@@ -59,7 +59,8 @@ jobs:
       fail-fast: false
       matrix:
         mayhemfile:
-          - mayhem/Mayhemfile
+          - mayhem/Mayhemfile_add
+          - mayhem/Mayhemfile_xmlToHtml
 
     steps:
       - uses: actions/checkout@v3

@@ -1,0 +1,5 @@
+project: freesurfer
+target: add
+cmds:
+  - cmd: /fuzz_add
+    libfuzzer: true

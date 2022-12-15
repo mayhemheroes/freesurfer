@@ -900,12 +900,6 @@ void FSSurface::UpdatePolyData( MRIS* mris,
       normal[i] = bInvertNormal?(orig[i] - normal[i]):(normal[i] - orig[i]);
     vtkMath::Normalize(normal);
     newNormals->InsertNextTuple( normal );
-
-    if ( polydata_verts )
-    {
-      vtkIdType n = vno;
-      verts->InsertNextCell( 1, &n );
-    }
   }
 
   // Go through and add the face indices.
@@ -917,6 +911,8 @@ void FSSurface::UpdatePolyData( MRIS* mris,
   }
   vtkIdType face[VERTICES_PER_FACE];
   float dx = 0, dy = 0, dz = 0;
+  unsigned char* vert_mask = new unsigned char[cVertices];
+  memset(vert_mask, 0, cVertices);
   for ( int fno = 0; fno < cFaces; fno++ )
   {
     if ( mris->faces[fno].ripflag == 0 )
@@ -944,8 +940,25 @@ void FSSurface::UpdatePolyData( MRIS* mris,
         dz = qMax(dz, qAbs(mris->vertices[face[1]].z - mris->vertices[face[2]].z));
         dz = qMax(dz, qAbs(mris->vertices[face[0]].z - mris->vertices[face[2]].z));
       }
+      if (polydata_verts)
+      {
+        for (int i = 0; i < 3; i++)
+          vert_mask[face[i]] = 1;
+      }
     }
   }
+  if ( polydata_verts )
+  {
+    for (int i = 0; i < cVertices; i++)
+    {
+      if (vert_mask[i])
+      {
+        vtkIdType n = i;
+        verts->InsertNextCell( 1, &n );
+      }
+    }
+  }
+  delete[] vert_mask;
   if (create_segs)
   {
     m_dMaxSegmentLength = sqrt(dx*dx+dy*dy+dz*dz);
@@ -1920,7 +1933,7 @@ bool FSSurface::Smooth(int nMethod, int niters, double lambda, double K_bp)
 
 void FSSurface::RemoveIntersections()
 {
-  MRISremoveIntersections(m_MRIS);
+  MRISremoveIntersections(m_MRIS,0);
   PostEditProcess();
 }
 
